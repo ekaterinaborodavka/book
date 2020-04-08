@@ -43,13 +43,41 @@ body{
 }
 .modal-content{
     position: relative;
-    width: 35%;
+    margin: 5% auto;
+    width: 45%;
     border: 1px solid black;
-    margin: 10% auto;
-    z-index: 1;
+    z-index: 2;
     background-color: white;
     display: flex;
     flex-wrap: wrap;
+}
+.modal-title{
+    font-size: 1.2em;
+}
+.filter{
+    display: none;
+}
+.active_filter{
+    background-color: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    z-index: 1;
+}
+
+.active{
+    pointer-events: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+    animation: fade 1s;
+}
+@keyframes fade {
+    from{opacity:0;}
+    to{opacity: 1;}
 }
 .wrapper_title{
     text-align: center;
@@ -74,6 +102,7 @@ body{
     border-bottom: 2px solid #4e9c50;
     line-height: 2.5em;
     color: gray;
+    font-size: 0.9em;
 }
 #title_book, #title_author{
     color: #4e9c50;
@@ -81,15 +110,18 @@ body{
 .buttons{
     width: 100%;
     background-color: #f0f0f0;
-    margin: 3% 0 0 0;
+    margin: 4% 0 0 0;
+    display: flex;
+    justify-content: flex-end;
 }
 .cancel, .save{
     text-align: center;
-    width: 25%;
+    width: 30%;
     border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 2%;
-    margin: 2%;
+    border-radius: 5%;
+    padding: 1%;
+    margin: 2% 4%;
+    font-size: 0.9em;
 }
 .save{
     background-color: #4e9c50;
@@ -108,33 +140,6 @@ body{
     margin: 0 0 0 3%;
     line-height: 2em;
     width: 100%;
-}
-.filter{
-    display: none;
-}
-.active_filter{
-    background-color: rgba(0,0,0,0.4);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: block;
-}
-
-.buttons{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.active{
-    pointer-events: auto;
-    animation: fade 2s;
-}
-@keyframes fade {
-    from{opacity:0;}
-    to{opacity: 1;}
 }
 .book_item, .total_info{
     width: 56%;
@@ -171,9 +176,14 @@ body{
 }
 .book_name, .book_friend{
     color: #4e9c50;
+    font-size: 1.2em;
+}
+.book_name, .book_author{
+    font-weight: bold;
 }
 .book_author, .book_until{
     color: gray;
+    font-size: 0.9em;
 }
 .book_info{
     width: 25%;

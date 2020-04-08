@@ -30,6 +30,8 @@ Books.listId=1;
 var save = document.querySelector('.save');
     save.addEventListener('click', saveBook);
 
+var parentLiId;
+
 function saveBook(){
     var book = document.querySelector('#title_book').value,
         author = document.querySelector('#title_author').value,
@@ -40,7 +42,10 @@ function saveBook(){
     if(newBook.book&&newBook.author&&newBook.friend&&newBook.until&&!bookCheckbox.checked){
             addNewBook(newBook);
             cancelModal ();
-       }else{
+       }else if(bookCheckbox.checked){
+            deleteBook(parentLiId);
+                }
+        else {
            cancelModal ();
        }
 }
@@ -72,7 +77,7 @@ function addNewBook(newBook){
     
     var bookAuthor = document.createElement('div');
     bookAuthor.className = 'book_author';
-    bookAuthor.innerHTML = newBook.author;
+    bookAuthor.innerHTML = 'from ' + newBook.author;
     
     bookTitle.appendChild(bookName);
     bookTitle.appendChild(bookAuthor);
@@ -109,27 +114,19 @@ function addNewBook(newBook){
     
     bookList.appendChild(bookItem);
 }
-
+ 
 function changeBook(){
     var checkbox = document.querySelector('.checkbox');
     checkbox.setAttribute('id', 'active_checkbox');
     
-    var parentLi = this.parentElement,
+    var parentLi = this.parentNode;
     parentLiId = parentLi.getAttribute('id');
-    
     showModal ();
-    
-    var bookCheckbox = document.querySelector('#title_checkbox');
-    if(bookCheckbox.checked){
-            changeCheckbox(parentLiId);
-            }
-    
 }
 
-function changeCheckbox(value){
-    var bookList = document.querySelector('.book_list'),
-    bookItem = document.getElementById('#value');
-    console.log(bookItem);
+function deleteBook(value){
+    var bookList = document.querySelector('.book_list');
+    bookItem = document.querySelector('#'+value);
     bookList.removeChild(bookItem);
     cancelModal ();
 }
