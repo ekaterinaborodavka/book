@@ -37,19 +37,33 @@ function saveBook(){
         author = document.querySelector('#title_author').value,
         friend = document.querySelector('#title_friend').value,
         until = document.querySelector('#title_until').value,
-        bookCheckbox = document.querySelector('#title_checkbox');
-    var newBook = new Books (book,author,friend, until)
-    if(newBook.book&&newBook.author&&newBook.friend&&newBook.until&&!bookCheckbox.checked){
+        bookCheckbox = document.querySelector('#title_checkbox'),
+        editBook = document.querySelector('#'+parentLiId),
+        newBook = new Books (book,author,friend, until);
+    
+    if(newBook.book&&newBook.author&&newBook.friend&&newBook.until&&!bookCheckbox.checked&&!editBook){
             addNewBook(newBook);
             cancelModal ();
        }else if(bookCheckbox.checked){
             deleteBook(parentLiId);
-                }
-        else {
-           cancelModal ();
+           Books.order--;
+       }else if(editBook){
+             var  bookEdit = editBook.querySelector('.book_title .book_name'),
+             authorEdit = editBook.querySelector('.book_title .book_author'),
+             friendEdit = editBook.querySelector('.book_info .book_friend'),
+             untilEdit = editBook.querySelector('.book_info .book_until');
+           
+             bookEdit.innerHTML = newBook.book;
+             authorEdit.innerHTML = 'from ' + newBook.author;
+             friendEdit.innerHTML = newBook.friend;
+             untilEdit.innerHTML = newBook.until;
+           
+             editBook.classList.remove('edit');
+             cancelModal ();
+       }else {
+            cancelModal ();
        }
 }
-
 
 function addNewBook(newBook){
     var bookList = document.querySelector('.book_list');
@@ -99,7 +113,7 @@ function addNewBook(newBook){
     var bookButton = document.createElement('button');
     bookButton.className = 'book_button';
     bookButton.type = 'button';
-    bookButton.addEventListener('click', changeBook);
+    bookButton.addEventListener('click', showChangeModal);
     
     var imgButton = document.createElement('img');
     imgButton.src = 'img/menu.png';
@@ -115,12 +129,14 @@ function addNewBook(newBook){
     bookList.appendChild(bookItem);
 }
  
-function changeBook(){
+function showChangeModal(){
     var checkbox = document.querySelector('.checkbox');
     checkbox.setAttribute('id', 'active_checkbox');
     
     var parentLi = this.parentNode;
     parentLiId = parentLi.getAttribute('id');
+    parentLi.classList.add('edit');
+    
     showModal ();
 }
 
