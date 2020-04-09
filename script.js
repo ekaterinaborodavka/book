@@ -13,6 +13,11 @@ function cancelModal (){
     var filter = document.querySelector('.active_filter');
     filter.setAttribute('class', 'filter');
     reset ();
+    
+    var editBook = document.querySelector('#'+parentLiId);
+    if(editBook){
+       editBook.classList.remove('edit');
+       }
 };
 var cancel = document.querySelector('.cancel');
     cancel.addEventListener('click', cancelModal);
@@ -47,7 +52,7 @@ function saveBook(){
         friend = document.querySelector('#title_friend').value,
         until = document.querySelector('#title_until').value,
         bookCheckbox = document.querySelector('#title_checkbox'),
-        editBook = document.querySelector('#'+parentLiId),
+        editBook = document.querySelector('#'+parentLiId);
         newBook = new Books (book,author,friend, until);
     
     if(newBook.book&&newBook.author&&newBook.friend&&newBook.until&&!bookCheckbox.checked&&!editBook){
@@ -138,6 +143,7 @@ function addNewBook(newBook){
     bookItem.appendChild(bookButton);
     
     bookList.appendChild(bookItem);
+    reset ();
 }
  
 function showChangeModal(){
@@ -147,6 +153,11 @@ function showChangeModal(){
     var parentLi = this.parentNode;
     parentLiId = parentLi.getAttribute('id');
     parentLi.classList.add('edit');
+    
+    document.querySelector('#title_book').value = parentLi.querySelector('.book_title .book_name').textContent,
+    document.querySelector('#title_author').value = parentLi.querySelector('.book_title .book_author').textContent,
+    document.querySelector('#title_friend').value = parentLi.querySelector('.book_info .book_friend').textContent,
+    document.querySelector('#title_until').value = parentLi.querySelector('.book_info .book_until').textContent; 
     
     showModal ();
 }
@@ -158,5 +169,12 @@ function deleteBook(value){
     
     var checkbox = document.querySelector('.checkbox');
     checkbox.removeAttribute('id');
+    
+    var num = document.querySelectorAll('.number'),
+    changeNum = 1;
+    for(i=0; i<num.length; i++){
+        num[i].innerHTML = changeNum;
+        changeNum++;
+    }
     cancelModal ();
 }
