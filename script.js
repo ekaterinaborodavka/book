@@ -12,9 +12,18 @@ function cancelModal (){
     mod.setAttribute('class', 'modal');
     var filter = document.querySelector('.active_filter');
     filter.setAttribute('class', 'filter');
+    reset ();
 };
 var cancel = document.querySelector('.cancel');
     cancel.addEventListener('click', cancelModal);
+
+function reset (){
+    var book = document.querySelector('#title_book').value = '',
+        author = document.querySelector('#title_author').value = '',
+        friend = document.querySelector('#title_friend').value = '',
+        until = document.querySelector('#title_until').value = '',
+        checkbox = document.querySelector('#title_checkbox').checked = '';
+}
 
 class Books{
     constructor(book,author,friend, until){
@@ -46,20 +55,22 @@ function saveBook(){
             cancelModal ();
        }else if(bookCheckbox.checked){
             deleteBook(parentLiId);
-           Books.order--;
+            Books.order--;
        }else if(editBook){
-             var  bookEdit = editBook.querySelector('.book_title .book_name'),
-             authorEdit = editBook.querySelector('.book_title .book_author'),
-             friendEdit = editBook.querySelector('.book_info .book_friend'),
-             untilEdit = editBook.querySelector('.book_info .book_until');
+            var  bookEdit = editBook.querySelector('.book_title .book_name'),
+            authorEdit = editBook.querySelector('.book_title .book_author'),
+            friendEdit = editBook.querySelector('.book_info .book_friend'),
+            untilEdit = editBook.querySelector('.book_info .book_until');
            
-             bookEdit.innerHTML = newBook.book;
-             authorEdit.innerHTML = 'from ' + newBook.author;
-             friendEdit.innerHTML = newBook.friend;
-             untilEdit.innerHTML = newBook.until;
+            bookEdit.innerHTML = newBook.book;
+            authorEdit.innerHTML = 'from ' + newBook.author;
+            friendEdit.innerHTML = newBook.friend;
+            untilEdit.innerHTML = newBook.until;
            
-             editBook.classList.remove('edit');
-             cancelModal ();
+            editBook.classList.remove('edit');
+            parentLiId = 'nan';
+            
+            cancelModal ();
        }else {
             cancelModal ();
        }
@@ -144,5 +155,8 @@ function deleteBook(value){
     var bookList = document.querySelector('.book_list');
     bookItem = document.querySelector('#'+value);
     bookList.removeChild(bookItem);
+    
+    var checkbox = document.querySelector('.checkbox');
+    checkbox.removeAttribute('id');
     cancelModal ();
 }
