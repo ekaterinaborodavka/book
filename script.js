@@ -14,10 +14,7 @@ function cancelModal (){
     filter.setAttribute('class', 'filter');
     reset ();
     
-    var editBook = document.querySelector('#'+parentLiId);
-    if(editBook){
-       editBook.classList.remove('edit');
-       }
+    parentLiId = 'nan';
 };
 var cancel = document.querySelector('.cancel');
     cancel.addEventListener('click', cancelModal);
@@ -59,8 +56,8 @@ function saveBook(){
             addNewBook(newBook);
             cancelModal ();
        }else if(bookCheckbox.checked){
-            deleteBook(parentLiId);
             Books.order--;
+            deleteBook(parentLiId);
        }else if(editBook){
             var  bookEdit = editBook.querySelector('.book_title .book_name'),
             authorEdit = editBook.querySelector('.book_title .book_author'),
