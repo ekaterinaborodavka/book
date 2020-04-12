@@ -1,30 +1,38 @@
-function showModal (){
-    var mod = document.querySelector('.modal');
-    mod.setAttribute('class', 'active');
-    var filter = document.querySelector('.filter');
-    filter.setAttribute('class', 'active_filter');
-};
-var addBook = document.querySelector('.add_book');
+'use strict';
+
+let addBook = document.querySelector('.add_book'),
+    cancel = document.querySelector('.cancel'),
+    save = document.querySelector('.save'),
+    book = document.querySelector('#title_book'),
+    author = document.querySelector('#title_author'),
+    friend = document.querySelector('#title_friend'),
+    until = document.querySelector('#title_until'),
+    bookList = document.querySelector('.book_list'),
+    totalBook = document.querySelector('.total_book'),
+    parentLiId;
+
     addBook.addEventListener('click', showModal);
+    cancel.addEventListener('click', cancelModal);
+    save.addEventListener('click', saveBook);
+
+function showModal (){
+    document.querySelector('.modal').setAttribute('class', 'active'),
+    document.querySelector('.filter').setAttribute('class', 'active_filter');
+}
 
 function cancelModal (){
-    var mod = document.querySelector('.active');
-    mod.setAttribute('class', 'modal');
-    var filter = document.querySelector('.active_filter');
-    filter.setAttribute('class', 'filter');
+    document.querySelector('.active').setAttribute('class', 'modal'),
+    document.querySelector('.active_filter').setAttribute('class', 'filter');
     reset ();
-    
-    parentLiId = 'nan';
-};
-var cancel = document.querySelector('.cancel');
-    cancel.addEventListener('click', cancelModal);
+    parentLiId = 'n';
+}
 
 function reset (){
-    var book = document.querySelector('#title_book').value = '',
-        author = document.querySelector('#title_author').value = '',
-        friend = document.querySelector('#title_friend').value = '',
-        until = document.querySelector('#title_until').value = '',
-        checkbox = document.querySelector('#title_checkbox').checked = '';
+    book.value = '',
+    author.value = '',
+    friend.value = '',
+    until.value = '',
+    document.querySelector('#title_checkbox').checked = '';
 }
 
 class Books{
@@ -38,19 +46,10 @@ class Books{
 Books.order=1;
 Books.listId=1;
 
-var save = document.querySelector('.save');
-    save.addEventListener('click', saveBook);
-
-var parentLiId;
-
 function saveBook(){
-    var book = document.querySelector('#title_book').value,
-        author = document.querySelector('#title_author').value,
-        friend = document.querySelector('#title_friend').value,
-        until = document.querySelector('#title_until').value,
-        bookCheckbox = document.querySelector('#title_checkbox'),
-        editBook = document.querySelector('#'+parentLiId);
-        newBook = new Books (book,author,friend, until);
+    let bookCheckbox = document.querySelector('#title_checkbox'),
+        editBook = document.querySelector('#'+parentLiId),
+        newBook = new Books (book.value, author.value, friend.value , until.value);
     
     if(newBook.book&&newBook.author&&newBook.friend&&newBook.until&&!bookCheckbox.checked&&!editBook){
             addNewBook(newBook);
@@ -59,18 +58,14 @@ function saveBook(){
             Books.order--;
             deleteBook(parentLiId);
        }else if(editBook){
-            var  bookEdit = editBook.querySelector('.book_title .book_name'),
-            authorEdit = editBook.querySelector('.book_title .book_author'),
-            friendEdit = editBook.querySelector('.book_info .book_friend'),
-            untilEdit = editBook.querySelector('.book_info .book_until');
-           
-            bookEdit.innerHTML = newBook.book;
-            authorEdit.innerHTML = 'from ' + newBook.author;
-            friendEdit.innerHTML = newBook.friend;
-            untilEdit.innerHTML = newBook.until;
+
+            editBook.querySelector('.book_title .book_name').innerHTML = newBook.book,
+            editBook.querySelector('.book_title .book_author').innerHTML ='from ' + newBook.author,
+            editBook.querySelector('.book_info .book_friend').innerHTML = newBook.friend,
+            editBook.querySelector('.book_info .book_until').innerHTML = newBook.until;
            
             editBook.classList.remove('edit');
-            parentLiId = 'nan';
+            parentLiId = 'n';
             
             cancelModal ();
        }else {
@@ -79,99 +74,97 @@ function saveBook(){
 }
 
 function addNewBook(newBook){
-    var bookList = document.querySelector('.book_list');
+    let totalLent = document.querySelector('.total_lent'),
+        bookItem = document.createElement('li'),
+        number = document.createElement('div'),
+        bookTitle = document.createElement('div'),
+        bookName = document.createElement('div'),
+        bookAuthor = document.createElement('div'),
+        bookInfo = document.createElement('div'),
+        bookFriend = document.createElement('div'),
+        bookUntil = document.createElement('div'),
+        bookButton = document.createElement('button'),
+        imgButton = document.createElement('img'),
+        dat;
     
-    var totalBook = document.querySelector('.total_book');
-    totalBook.innerHTML = 'You have lent '+ Books.order +' books to friends';
+        totalBook.innerHTML = 'You have lent '+ Books.order +' books to friends';
+        totalLent.innerHTML = 'Lent to:';
     
-    var totalLent = document.querySelector('.total_lent');
-    totalLent.innerHTML = 'Lent to:';
+        bookItem.className='book_item';
+        bookItem.setAttribute('id', 'list_id'+Books.listId++);
+        
+        number.className = 'number';
+        number.innerHTML = Books.order++;
     
-    var bookItem = document.createElement('li');
-    bookItem.className='book_item';
-    bookItem.setAttribute('id', 'list_id'+Books.listId++);
+        bookTitle.className = 'book_title';
     
-    var number = document.createElement('div');
-    number.className = 'number';
-    number.innerHTML = Books.order++;
+        bookName.className = 'book_name';
+        bookName.innerHTML = newBook.book;
     
-    var bookTitle = document.createElement('div');
-    bookTitle.className = 'book_title';
+        bookAuthor.className = 'book_author';
+        bookAuthor.innerHTML = 'from ' + newBook.author;
     
-    var bookName = document.createElement('div');
-    bookName.className = 'book_name';
-    bookName.innerHTML = newBook.book;
+        bookTitle.appendChild(bookName);
+        bookTitle.appendChild(bookAuthor);
     
-    var bookAuthor = document.createElement('div');
-    bookAuthor.className = 'book_author';
-    bookAuthor.innerHTML = 'from ' + newBook.author;
+        bookInfo.className = 'book_info';
     
-    bookTitle.appendChild(bookName);
-    bookTitle.appendChild(bookAuthor);
+        bookFriend.className = 'book_friend';
+        bookFriend.innerHTML = newBook.friend;
     
-    var bookInfo = document.createElement('div');
-    bookInfo.className = 'book_info';
+        bookUntil.className = 'book_until';
+        bookUntil.innerHTML = newBook.until;
     
-    var bookFriend = document.createElement('div');
-    bookFriend.className = 'book_friend';
-    bookFriend.innerHTML = newBook.friend;
+        bookInfo.appendChild(bookFriend);
+        bookInfo.appendChild(bookUntil);
     
-    var bookUntil = document.createElement('div');
-    bookUntil.className = 'book_until';
-    bookUntil.innerHTML = newBook.until;
+        bookButton.className = 'book_button';
+        bookButton.type = 'button';
+        bookButton.addEventListener('click', showChangeModal);
     
-    bookInfo.appendChild(bookFriend);
-    bookInfo.appendChild(bookUntil);
+        imgButton.src = 'img/menu.png';
+        imgButton.className = 'button_img';
     
-    var bookButton = document.createElement('button');
-    bookButton.className = 'book_button';
-    bookButton.type = 'button';
-    bookButton.addEventListener('click', showChangeModal);
+        bookButton.appendChild(imgButton);
     
-    var imgButton = document.createElement('img');
-    imgButton.src = 'img/menu.png';
-    imgButton.className = 'button_img';
-    
-    bookButton.appendChild(imgButton);
-    
-    bookItem.appendChild(number);
-    bookItem.appendChild(bookTitle);
-    bookItem.appendChild(bookInfo);
-    bookItem.appendChild(bookButton);
-    
-    bookList.appendChild(bookItem);
-    reset ();
+        bookItem.appendChild(number);
+        bookItem.appendChild(bookTitle);
+        bookItem.appendChild(bookInfo);
+        bookItem.appendChild(bookButton);
+        bookList.appendChild(bookItem);
+        reset ();
 }
  
 function showChangeModal(){
-    var checkbox = document.querySelector('.checkbox');
-    checkbox.setAttribute('id', 'active_checkbox');
+    let checkbox = document.querySelector('.checkbox'),
+        parentLi = this.parentNode;
     
-    var parentLi = this.parentNode;
-    parentLiId = parentLi.getAttribute('id');
-    parentLi.classList.add('edit');
-    
-    document.querySelector('#title_book').value = parentLi.querySelector('.book_title .book_name').textContent,
-    document.querySelector('#title_author').value = parentLi.querySelector('.book_title .book_author').textContent,
-    document.querySelector('#title_friend').value = parentLi.querySelector('.book_info .book_friend').textContent,
-    document.querySelector('#title_until').value = parentLi.querySelector('.book_info .book_until').textContent; 
-    
-    showModal ();
+        checkbox.setAttribute('id', 'active_checkbox');
+
+        parentLiId = parentLi.getAttribute('id');
+        parentLi.classList.add('edit');
+
+        book.value = parentLi.querySelector('.book_title .book_name').textContent,
+        author.value = parentLi.querySelector('.book_title .book_author').textContent.slice(5,),
+        friend.value = parentLi.querySelector('.book_info .book_friend').textContent,
+        until.value = parentLi.querySelector('.book_info .book_until').textContent; 
+
+        showModal ();
 }
 
 function deleteBook(value){
-    var bookList = document.querySelector('.book_list');
-    bookItem = document.querySelector('#'+value);
-    bookList.removeChild(bookItem);
+    let bookItem = document.querySelector('#'+value),
+        checkbox = document.querySelector('.checkbox');
     
-    var checkbox = document.querySelector('.checkbox');
-    checkbox.removeAttribute('id');
+        bookList.removeChild(bookItem);
+        checkbox.removeAttribute('id');
     
-    var num = document.querySelectorAll('.number'),
-    changeNum = 1;
-    for(i=0; i<num.length; i++){
+    let num = document.querySelectorAll('.number'),
+        changeNum = 1;
+    for(let i=0; i<num.length; i++){
         num[i].innerHTML = changeNum;
         changeNum++;
+        totalBook.innerHTML = 'You have lent '+ num[num.length-1].textContent +' books to friends';
     }
     cancelModal ();
 }
